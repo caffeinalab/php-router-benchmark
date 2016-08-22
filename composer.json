@@ -4,6 +4,8 @@
     "nikic/fast-route": "dev-master",
     "corneltek/pux": "dev-master",
     "symfony/routing": "dev-master",
-    "aura/router": "2.x-dev"
-  }
+    "aura/router": "2.x-dev",
+    "caffeina-core/core": "dev-master"
+  },
+  "minimum-stability": "dev"
 }

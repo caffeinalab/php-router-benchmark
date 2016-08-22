@@ -3,6 +3,7 @@
 use Nice\Benchmark\BenchmarkCollection;
 
 error_reporting(E_ALL);
+gc_disable();
 
 require __DIR__ . '/vendor/autoload.php';
 

@@ -26,6 +26,8 @@ function setupBenchmark($numIterations, $numRoutes, $numArgs)
             $numArgs
         ));
 
+    setupCore($benchmark, $numRoutes, $numArgs);
+
     setupAura2($benchmark, $numRoutes, $numArgs);
     setupFastRoute($benchmark, $numRoutes, $numArgs);
     if (extension_loaded('r3')) {
@@ -248,4 +250,35 @@ function setupAura2(Benchmark $benchmark, $routes, $args)
     $benchmark->register(sprintf('Aura v2 - unknown route (%s routes)', $routes), function () use ($router) {
             $route = $router->match('/not-even-real', $_SERVER);
         });
+}
+
+/**
+ * Sets up Core tests
+ */
+function setupCore(Benchmark $benchmark, $routes, $args){
+
+    $argString = implode('/', array_map(function ($i) { return ':arg' . $i; }, range(1, $args)));
+    $str = $firstStr = $lastStr = '';
+
+    for ($i = 0; $i < $routes; $i++) {
+        list ($pre, $post) = getRandomParts();
+        $str = '/' . $pre . '/' . $argString . '/' . $post;
+
+        if (0 === $i) {
+            $firstStr = str_replace(':', '', $str);
+        }
+        $lastStr = str_replace(':', '', $str);
+
+        \Route::on($str, "handler$i");
+    }
+
+    \Route::optimize();
+
+    $benchmark->register(sprintf('Caffeina Core - last route (%s routes)', $routes), function () use ($lastStr) {
+      \Route::dispatch($lastStr);
+    });
+
+    $benchmark->register(sprintf('Caffeina Core - unknown route (%s routes)', $routes), function () {
+      \Route::dispatch('/not-even-real');
+    });
 }
