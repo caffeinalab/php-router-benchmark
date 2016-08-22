@@ -248,9 +248,7 @@ function setupCore(Benchmark $benchmark, $routes, $args){
         \Route::on($str, "handler$i");
     }
 
-    \Route::optimize();
-
     $benchmark->register(sprintf('Caffeina Core - first route'), function () use ($firstStr) {
-      \Route::dispatch($firstStr);
+      \Route::dispatch($firstStr,'get',true);
     });
 }

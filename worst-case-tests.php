@@ -272,13 +272,11 @@ function setupCore(Benchmark $benchmark, $routes, $args){
         \Route::on($str, "handler$i");
     }
 
-    \Route::optimize();
-
     $benchmark->register(sprintf('Caffeina Core - last route (%s routes)', $routes), function () use ($lastStr) {
-      \Route::dispatch($lastStr);
+      \Route::dispatch($lastStr,'get',true);
     });
 
     $benchmark->register(sprintf('Caffeina Core - unknown route (%s routes)', $routes), function () {
-      \Route::dispatch('/not-even-real');
+      \Route::dispatch('/not-even-real','get',true);
     });
 }
